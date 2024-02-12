@@ -1,20 +1,19 @@
 package com.queomedia.persistence;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.StringTokenizer;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.queomedia.persistence.BusinessId;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class PropertyEntityTest {
 
     private Entity entity;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.entity = new Entity();
     }
@@ -26,15 +25,18 @@ public class PropertyEntityTest {
         assertEquals("value", entity.getProperty("key"));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testGetPropertyNotSet() {
-        entity.getProperty("not existent");
+        assertThrows(RuntimeException.class, () -> entity.getProperty("not existent"));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDoubleSet() {
-        entity.setProperty("key", true);
-        entity.setProperty("key", false);
+        assertThrows(RuntimeException.class, () -> {
+            entity.setProperty("key", true);
+            entity.setProperty("key", false);
+        });
+
     }
 
     /** Test the conventions method to derive the key name from the class name. */
@@ -54,14 +56,14 @@ public class PropertyEntityTest {
         assertEquals("value", entity.getProperties().get("key"));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testGetProperties_unmodifiable() {
-        entity.getProperties().put("key", "value");
+        assertThrows(UnsupportedOperationException.class,() ->  entity.getProperties().put("key", "value"));
 
     }
-    
+
     @Test
-    public void testSetOrOverwriteProperty(){
+    public void testSetOrOverwriteProperty() {
         entity.setProperty("key", "value");
         entity.setOrOverwriteProperty("key", "value");
     }

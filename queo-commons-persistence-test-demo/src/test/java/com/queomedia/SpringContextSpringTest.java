@@ -2,15 +2,15 @@ package com.queomedia;
 
 import javax.annotation.Resource;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @Transactional
 @ContextConfiguration(SpringTestContext.APPLICATION)
 public class SpringContextSpringTest {
@@ -20,6 +20,6 @@ public class SpringContextSpringTest {
 
     @Test
     public void testSpringContextLoad() {
-        Assert.assertNotNull("application context expected", this.applicationContext);
+        Assertions.assertNotNull(this.applicationContext, "application context expected");
     }
 }

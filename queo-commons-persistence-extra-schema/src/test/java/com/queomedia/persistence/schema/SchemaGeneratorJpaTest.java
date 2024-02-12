@@ -1,7 +1,8 @@
 package com.queomedia.persistence.schema;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -10,8 +11,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 public class SchemaGeneratorJpaTest {
 
@@ -36,7 +37,7 @@ public class SchemaGeneratorJpaTest {
         Pattern pattern = Pattern.compile(normalize("create table DemoEntity \\((.+?)\\) ENGINE=InnoDB"), Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(normalize(generateDdlScript));
         boolean found = matcher.find();        
-        assertTrue("not statement to create table DemoEntity found", found);        
+        assertTrue(found, "not statement to create table DemoEntity found");        
         String demoEntityPart = matcher.group(1);
 
         assertEquals(normalize(expectedScript), demoEntityPart);
@@ -54,13 +55,13 @@ public class SchemaGeneratorJpaTest {
         SchemaGeneratorJpa generator = new SchemaGeneratorJpa(Dialect.MYSQL);
         String generateDdlScript = generator.generateDdlScript("examplePersistenceUnit", ";", false);       
 
-        Assert.assertThat(generateDdlScript,
+        assertThat(generateDdlScript,
                 Matchers.containsString(
                         "-- alter table DemoEntiyWithRelation drop foreign key FKkx2ht41rvx878qivxu39d3hnd;"));
         
-        Assert.assertThat(generateDdlScript, Matchers.containsString("drop table if exists DemoEntity;"));
-        Assert.assertThat(generateDdlScript, Matchers.containsString("drop table if exists DemoEntityWithMinConstraint;"));
-        Assert.assertThat(generateDdlScript, Matchers.containsString("drop table if exists DemoEntiyWithRelation;"));
+        assertThat(generateDdlScript, Matchers.containsString("drop table if exists DemoEntity;"));
+        assertThat(generateDdlScript, Matchers.containsString("drop table if exists DemoEntityWithMinConstraint;"));
+        assertThat(generateDdlScript, Matchers.containsString("drop table if exists DemoEntiyWithRelation;"));
     }
     
     /**
@@ -74,12 +75,12 @@ public class SchemaGeneratorJpaTest {
         SchemaGeneratorJpa generator = new SchemaGeneratorJpa(Dialect.MYSQL);
         String generateDdlScript = generator.generateDdlScript("examplePersistenceUnit", ";", true);
         
-        Assert.assertThat(generateDdlScript,
+        assertThat(generateDdlScript,
                 Matchers.containsString(
                         "-- alter table DemoEntiyWithRelation drop foreign key FKkx2ht41rvx878qivxu39d3hnd;"));
-        Assert.assertThat(generateDdlScript, Matchers.containsString("-- drop table if exists DemoEntity;"));
-        Assert.assertThat(generateDdlScript, Matchers.containsString("-- drop table if exists DemoEntityWithMinConstraint;"));
-        Assert.assertThat(generateDdlScript, Matchers.containsString("-- drop table if exists DemoEntiyWithRelation;"));
+        assertThat(generateDdlScript, Matchers.containsString("-- drop table if exists DemoEntity;"));
+        assertThat(generateDdlScript, Matchers.containsString("-- drop table if exists DemoEntityWithMinConstraint;"));
+        assertThat(generateDdlScript, Matchers.containsString("-- drop table if exists DemoEntiyWithRelation;"));
     }
     
     
@@ -96,12 +97,12 @@ public class SchemaGeneratorJpaTest {
 
         System.out.println(generateDdlScript);
         
-        Assert.assertThat(generateDdlScript,
+        assertThat(generateDdlScript,
                 Matchers.containsString(
                         "-- alter table DemoEntiyWithRelation drop foreign key FKkx2ht41rvx878qivxu39d3hnd"));
-        Assert.assertThat(generateDdlScript, Matchers.containsString("-- begin execute immediate 'drop table if exists DemoEntity';"));
-        Assert.assertThat(generateDdlScript, Matchers.containsString("-- begin execute immediate 'drop table if exists DemoEntityWithMinConstraint';"));
-        Assert.assertThat(generateDdlScript, Matchers.containsString("-- begin execute immediate 'drop table if exists DemoEntiyWithRelation';"));
+        assertThat(generateDdlScript, Matchers.containsString("-- begin execute immediate 'drop table if exists DemoEntity';"));
+        assertThat(generateDdlScript, Matchers.containsString("-- begin execute immediate 'drop table if exists DemoEntityWithMinConstraint';"));
+        assertThat(generateDdlScript, Matchers.containsString("-- begin execute immediate 'drop table if exists DemoEntiyWithRelation';"));
     }
 
     /**
@@ -121,9 +122,9 @@ public class SchemaGeneratorJpaTest {
         String demoEntityWithMinConstraintPart = StringUtils.substringBefore(StringUtils
                 .substringAfter(normalize(generateDdlScript), normalize("create table DemoEntityWithMinConstraint (")),
                 normalize(");"));
-        assertEquals("found : " + demoEntityWithMinConstraintPart,
-                normalize(expectedScript),
-                demoEntityWithMinConstraintPart);
+        assertEquals(normalize(expectedScript),
+                demoEntityWithMinConstraintPart,
+                "found : " + demoEntityWithMinConstraintPart);
     }
 
     private String normalize(String s) {
@@ -142,7 +143,7 @@ public class SchemaGeneratorJpaTest {
             for (int i2 = 0; i2 < size; i2++) {
                 if (i1 != i2) {
                     if (statements.get(i1).equals(statements.get(i2))) {
-                        Assert.fail("the stamtent `" + statements.get(i1) + "` occures twice, at index " + i1 + " and "
+                        Assertions.fail("the stamtent `" + statements.get(i1) + "` occures twice, at index " + i1 + " and "
                                 + i2);
                     }
                 }

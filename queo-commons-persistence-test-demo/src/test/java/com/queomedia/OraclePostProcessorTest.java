@@ -1,8 +1,9 @@
 package com.queomedia;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import com.queomedia.persistence.schema.Dialect;
 import com.queomedia.persistence.schema.SchemaGeneratorJpa;

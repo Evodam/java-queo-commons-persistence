@@ -3,8 +3,8 @@ package com.queomedia.persistence.schema.prettyprint.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 import com.queomedia.persistence.schema.prettyprint.SqlPrettyPrinter;
 
@@ -16,7 +16,7 @@ public class PrettyPrinterTest {
     public void testFormatLineStatement() throws Exception {
         String result = this.prettyPrinter
                 .formatLineStatement("create table test (id bigint not null auto_increment, businessId bigint not null, title varchar(255) not null, testType_fk bigint not null, primary key (id)) ENGINE=InnoDB;");
-        Assert.assertEquals("create table test (\n" //$NON-NLS-1$
+        Assertions.assertEquals("create table test (\n" //$NON-NLS-1$
                 + "    id bigint not null auto_increment,\n" //$NON-NLS-1$
                 + "    businessId bigint not null,\n" //$NON-NLS-1$
                 + "    title varchar(255) not null,\n" //$NON-NLS-1$
@@ -35,7 +35,7 @@ public class PrettyPrinterTest {
     public void testFormatLineStatement_withNestedBrackets() throws Exception {
         String result = this.prettyPrinter
                 .formatLineStatement("create table test (id bigint not null auto_increment, businessId bigint not null, counter decimal(0,10) not null, testType_fk bigint not null, primary key (id)) ENGINE=InnoDB;");
-        Assert.assertEquals("create table test (\n" //$NON-NLS-1$
+        Assertions.assertEquals("create table test (\n" //$NON-NLS-1$
                 + "    id bigint not null auto_increment,\n" //$NON-NLS-1$
                 + "    businessId bigint not null,\n" //$NON-NLS-1$
                 + "    counter decimal(0,10) not null,\n" //$NON-NLS-1$
@@ -54,7 +54,7 @@ public class PrettyPrinterTest {
 
         List<List<String>> result = this.prettyPrinter.groupStatments(statements);
         /** Expected two groups, because the table is different */
-        Assert.assertEquals(Arrays.asList(Arrays.asList(statements.get(0)), Arrays.asList(statements.get(1))), result);
+        Assertions.assertEquals(Arrays.asList(Arrays.asList(statements.get(0)), Arrays.asList(statements.get(1))), result);
     }
 
     @SuppressWarnings("unchecked")
@@ -67,7 +67,7 @@ public class PrettyPrinterTest {
 
         List<List<String>> result = this.prettyPrinter.groupStatments(statements);
         /** Expected two groups, because the table is different */
-        Assert.assertEquals(Arrays.asList(Arrays.asList(statements.get(0), statements.get(1))), result);
+        Assertions.assertEquals(Arrays.asList(Arrays.asList(statements.get(0), statements.get(1))), result);
     }
     
     
@@ -79,12 +79,12 @@ public class PrettyPrinterTest {
 
         List<List<String>> result = this.prettyPrinter.groupStatments(statements);
         /** Expected two groups, because the table is different */
-        Assert.assertEquals(Arrays.asList(Arrays.asList(statements.get(0)), Arrays.asList(statements.get(1))), result);
+        Assertions.assertEquals(Arrays.asList(Arrays.asList(statements.get(0)), Arrays.asList(statements.get(1))), result);
     }
 
     @Test
     public void testExtractFromStatment() throws Exception {
-        Assert.assertEquals(new SqlPrettyPrinter.Group("create", "body_style"),
+        Assertions.assertEquals(new SqlPrettyPrinter.Group("create", "body_style"),
                 SqlPrettyPrinter.Group.extractFromStatment("create table body_style (id bigint not..."));
     }
 }

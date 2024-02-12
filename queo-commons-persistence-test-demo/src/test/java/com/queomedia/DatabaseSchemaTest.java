@@ -1,6 +1,6 @@
 package com.queomedia;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.File;
 import java.util.Arrays;
@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 
 import com.queomedia.commons.asserts.AssertUtil;
@@ -24,7 +24,7 @@ public class DatabaseSchemaTest {
     @Test
     public void testDllSchemaFileMatch() throws Exception {
         File orignalFile = ResourceUtils.getFile("classpath:" + SchemaGeneratorRunner.DDL_FILENAME);
-        Assert.assertTrue(orignalFile.exists());
+        Assertions.assertTrue(orignalFile.exists());
 
         SchemaGeneratorJpa gen = new SchemaGeneratorJpa(Dialect.MYSQL);
         String currentScript = gen.generateDdlScript("persistenceUnit", ";", false);
@@ -38,7 +38,7 @@ public class DatabaseSchemaTest {
     @Test
     public void testDllSchemaFileMatch_deprecatedStyle() throws Exception {
         File orignalFile = ResourceUtils.getFile("classpath:" + SchemaGeneratorRunner.DDL_FILENAME);
-        Assert.assertTrue(orignalFile.exists());
+        Assertions.assertTrue(orignalFile.exists());
 
         File temp = File.createTempFile("currentTestDbSchema", ".sql");
         temp.deleteOnExit();
@@ -58,7 +58,7 @@ public class DatabaseSchemaTest {
     @Test
     public void testDllSchemaNotEmptyConstraint() throws Exception {
         File orignalFile = ResourceUtils.getFile("classpath:" + SchemaGeneratorRunner.DDL_FILENAME);
-        Assert.assertTrue(orignalFile.exists());
+        Assertions.assertTrue(orignalFile.exists());
 
         SchemaGeneratorJpa gen = new SchemaGeneratorJpa(Dialect.MYSQL);
         String currentScript = gen.generateDdlScript("persistenceUnit", ";", false);
@@ -77,7 +77,7 @@ public class DatabaseSchemaTest {
     @Test
     public void testDllSchemaNotEmptyConstraint_hibernateValidatorNotEmpty() throws Exception {
         File orignalFile = ResourceUtils.getFile("classpath:" + SchemaGeneratorRunner.DDL_FILENAME);
-        Assert.assertTrue(orignalFile.exists());
+        Assertions.assertTrue(orignalFile.exists());
 
         SchemaGeneratorJpa gen = new SchemaGeneratorJpa(Dialect.MYSQL);
         String currentScript = gen.generateDdlScript("persistenceUnit", ";", false);
@@ -96,7 +96,7 @@ public class DatabaseSchemaTest {
     @Test
     public void testDllSchemaNotEmptyConstraint_javaxValidationNotEmpty() throws Exception {
         File orignalFile = ResourceUtils.getFile("classpath:" + SchemaGeneratorRunner.DDL_FILENAME);
-        Assert.assertTrue(orignalFile.exists());
+        Assertions.assertTrue(orignalFile.exists());
 
         SchemaGeneratorJpa gen = new SchemaGeneratorJpa(Dialect.MYSQL);
         String currentScript = gen.generateDdlScript("persistenceUnit", ";", false);

@@ -1,7 +1,7 @@
 package com.queomedia.persistence.extra.json;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.jmock.Expectations;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.Rule;
-import org.junit.Test;
+import org.jmock.imposters.ByteBuddyClassImposteriser;
+import org.jmock.junit5.JUnit5Mockery;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
@@ -32,12 +32,12 @@ import com.queomedia.persistence.GeneralLoaderDao;
 public class BusinessEntityModuleTest {
 
     /** JMock Context */
-    @Rule
-    public final JUnitRuleMockery context = new JUnitRuleMockery() {
-        {
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    };
+    @RegisterExtension
+        public final JUnit5Mockery context = new JUnit5Mockery() {
+            {
+                setImposteriser(ByteBuddyClassImposteriser.INSTANCE);
+            }
+        };
 
     /**
      * A demo entity only used in this test.

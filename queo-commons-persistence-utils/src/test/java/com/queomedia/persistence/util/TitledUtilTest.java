@@ -1,8 +1,8 @@
 package com.queomedia.persistence.util;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.queomedia.persistence.domain.Titled;
 
@@ -29,7 +29,7 @@ public class TitledUtilTest {
     @Test
     public void testExtractEntityTitle_NotTitled() throws Exception {
         
-        assertFalse("CustomTilted", TitledUtil.extractEntityTitle(new CustomNotTilted()).isPresent());
+        assertFalse(TitledUtil.extractEntityTitle(new CustomNotTilted()).isPresent(), "CustomTilted");
     }
     
     public static class CustomTilted implements Titled {

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>queo-commons-persistence-extra-schema</artifactId>
@@ -56,11 +57,6 @@
 		</dependency>
 
 		<!-- test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>org.hamcrest</groupId>
@@ -68,24 +64,46 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- junit -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-				<!--
-			   		el-impl is needed for hibernate-validator 5 and 6 
-			   		http://stackoverflow.com/questions/19451814/java-lang-noclassdeffounderror-javax-el-propertynotfoundexception-when-i-send-i
-			   		else: ClassNotFoundException: com.sun.el.ExpressionFactoryImpl			   		
-			   		But is is typical used with scope provided			   		
-			   		with hibernate-validator 6.0.7 we use javax.el-api 3.0.0 and with the glassfish implementation 3.0.1-b08
-			 	-->
+			<!--
+				   el-impl is needed for hibernate-validator 5 and 6
+				   http://stackoverflow.com/questions/19451814/java-lang-noclassdeffounderror-javax-el-propertynotfoundexception-when-i-send-i
+				   else: ClassNotFoundException: com.sun.el.ExpressionFactoryImpl
+				   But is is typical used with scope provided
+				   with hibernate-validator 6.0.7 we use javax.el-api 3.0.0 and with the glassfish implementation 3.0.1-b08
+			 -->
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.el</artifactId>
 			<scope>test</scope>

@@ -12,11 +12,11 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.jmock.Expectations;
-import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.jmock.imposters.ByteBuddyClassImposteriser;
+import org.jmock.junit5.JUnit5Mockery;
 import org.json.JSONException;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
@@ -33,12 +33,12 @@ import com.queomedia.persistence.GeneralLoaderDao;
 public class SwitchingBusinessEntityModuleTest {
 
     /** JMock Context */
-    @Rule
-    public final JUnitRuleMockery context = new JUnitRuleMockery() {
-        {
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    };
+    @RegisterExtension
+        public final JUnit5Mockery context = new JUnit5Mockery() {
+            {
+                setImposteriser(ByteBuddyClassImposteriser.INSTANCE);
+            }
+        };
 
     public static ObjectMapper configuredObjectMapper(final GeneralLoaderDao generalLoaderDao) {
         ObjectMapper mapper = new ObjectMapper();

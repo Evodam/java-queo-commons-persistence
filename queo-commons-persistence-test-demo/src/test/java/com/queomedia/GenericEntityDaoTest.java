@@ -2,13 +2,13 @@ package com.queomedia;
 
 import java.util.Arrays;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.queomedia.base.test.hibernate.manytoonelazy.CompositeEntity;
@@ -16,7 +16,7 @@ import com.queomedia.base.test.hibernate.manytoonelazy.CompositeEntityDao;
 import com.queomedia.commons.asserts.AssertUtil;
 import com.queomedia.persistence.BusinessId;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @Transactional
 @ContextConfiguration(SpringTestContext.APPLICATION)
 public class GenericEntityDaoTest {

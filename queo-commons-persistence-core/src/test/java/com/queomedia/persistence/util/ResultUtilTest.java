@@ -1,12 +1,13 @@
 package com.queomedia.persistence.util;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.queomedia.commons.exceptions.NotFoundRuntimeException;
@@ -34,11 +35,12 @@ public class ResultUtilTest {
         assertNull(result);
     }
 
-    @Test(expected = IncorrectResultSizeDataAccessException.class)
+    @Test
     public void testRequiredOneOrNoResultToMuch() {
 
         List<Object> emptyElementCollection = Arrays.asList(new Object(), new Object());
-        ResultUtil.requiredOneOrNoResult(emptyElementCollection);
+        assertThrows(IncorrectResultSizeDataAccessException.class,
+                () -> ResultUtil.requiredOneOrNoResult(emptyElementCollection));
     }
 
     @Test
@@ -51,20 +53,22 @@ public class ResultUtilTest {
 
         assertSame(entity, result);
     }
-    
-    @Test(expected=NotFoundRuntimeException.class)
+
+    @Test
     public void testRequiredOneResultEmpty() {
 
         List<Object> emptyElementCollection = Arrays.asList();
 
-        ResultUtil.requiredOneResult(emptyElementCollection, "");
+        assertThrows(NotFoundRuntimeException.class,
+                () -> ResultUtil.requiredOneResult(emptyElementCollection, ""));
     }
-    
-    @Test(expected = IncorrectResultSizeDataAccessException.class)
+
+    @Test
     public void testRequiredOneResultToMuch() {
 
         List<Object> emptyElementCollection = Arrays.asList(new Object(), new Object());
-        ResultUtil.requiredOneResult(emptyElementCollection, "");
+        assertThrows(IncorrectResultSizeDataAccessException.class,
+                () -> ResultUtil.requiredOneResult(emptyElementCollection, ""));
     }
 
 }

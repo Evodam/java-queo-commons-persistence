@@ -1,14 +1,15 @@
 package com.queomedia.persistence.extra.springdatajpa;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.queomedia.commons.exceptions.NotFoundRuntimeException;
@@ -18,7 +19,7 @@ import com.queomedia.persistence.extra.springdatajpa.scenario.PersistenceTestCon
 import com.queomedia.persistence.extra.springdatajpa.scenario.SomeEntity;
 import com.queomedia.persistence.extra.springdatajpa.scenario.SomeEntityRepository;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { PersistenceTestContext.class })
 @Transactional
 @Rollback
@@ -46,12 +47,14 @@ public class BusinessEntityRepositoryTest {
      * try to get {@link SomeEntity} by its id, that does not exist, results in a {@link NotFoundRuntimeException}.
      * Requires that NULL-AWARE is enabled!
      */
-    @Test(expected = NotFoundRuntimeException.class)
+    @Test
     public void testGetByBusinessId_withNotExistingBid() {
         /** given: no someEntity at all. */
 
         /** when: try to load an someEntity with an not existing business id. */
-        this.someEntityRepository.getByBusinessId(new BusinessId<SomeEntity>(123));
+        assertThrows(NotFoundRuntimeException.class, () -> {
+            this.someEntityRepository.getByBusinessId(new BusinessId<SomeEntity>(123));
+        });
 
         /** then: exception */
     }
