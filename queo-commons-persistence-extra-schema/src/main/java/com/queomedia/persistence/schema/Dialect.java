@@ -13,7 +13,7 @@ public enum Dialect {
     /**
      * The MySql dialect.
      */
-    MYSQL("org.hibernate.dialect.MySQL5InnoDBDialect"),
+    MYSQL("org.hibernate.dialect.MySQL55Dialect"),
 
     /**
      * The HSQL dialect.

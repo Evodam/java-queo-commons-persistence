@@ -11,14 +11,14 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 /**
  * The annotated element must not be <code>null</code>.
  * Accepts any type.
  * 
- * Behaves like {@link javax.validation.constraints.NotNull} constraint, except that this annotation is unknown to
+ * Behaves like {@link jakarta.validation.constraints.NotNull} constraint, except that this annotation is unknown to
  * hibernate schema generator and therefore it does not make the database column Not Null.
  * 
  * <p>
@@ -45,7 +45,7 @@ public @interface NotNullExceptForOracle {
      *
      * @return the string
      */
-    String message() default "{javax.validation.constraints.NotNull.message}";
+    String message() default "{jakarta.validation.constraints.NotNull.message}";
 
     /**
      * The validation group.

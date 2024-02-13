@@ -16,10 +16,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.persistence.Persistence;
-import javax.persistence.spi.PersistenceProvider;
-import javax.persistence.spi.PersistenceProviderResolverHolder;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.beanvalidation.BeanValidation20IntegratorProvider;
@@ -30,6 +26,10 @@ import org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl;
 import com.queomedia.commons.checks.Check;
 import com.queomedia.persistence.schema.prettyprint.SqlPrettyPrinter;
 import com.queomedia.persistence.schema.statmentpostprocessor.StatementPostProcessor;
+
+import jakarta.persistence.Persistence;
+import jakarta.persistence.spi.PersistenceProvider;
+import jakarta.persistence.spi.PersistenceProviderResolverHolder;
 
 /**
  * JPA 2.1 based schema generator.
@@ -186,7 +186,7 @@ public class SchemaGeneratorJpa {
             Map<String, Object> props = buildPersistenceProperties(stringWriter);
 
             if (Version.hibernateVersion().isGreatherOrEqualsThan(new Version(5, 1, 0))) {
-                hiberante51GenerateSchemaWorkarround(persistenceUntitName, props);
+                hibernate51GenerateSchemaWorkaround(persistenceUntitName, props);
             } else {
                 Persistence.generateSchema(persistenceUntitName, props);
             }
@@ -209,8 +209,8 @@ public class SchemaGeneratorJpa {
         /** need to disable validation, else the database connection would be used to validate (or update) the existing DB schema */
         props.put(AvailableSettings.HBM2DDL_AUTO, "none");
 
-        props.put("javax.persistence.schema-generation.database.action", "none");
-        props.put("javax.persistence.schema-generation.scripts.action", "drop-and-create");
+        props.put("jakarta.persistence.schema-generation.database.action", "none");
+        props.put("jakarta.persistence.schema-generation.scripts.action", "drop-and-create");
         //            props.put("javax.persistence.schema-generation.scripts.action", "create-drop");
 
         //            koennte verwendet werden um das Script einzupflecten
@@ -227,10 +227,10 @@ public class SchemaGeneratorJpa {
         //            props.put("javax.persistence.database-major-version", "5");
         //            props.put("javax.persistence.database-minor-version", "1");
 
-        props.put("javax.persistence.schema-generation-connection", new DummyConnection());
+        props.put("jakarta.persistence.schema-generation-connection", new DummyConnection());
 
-        props.put("javax.persistence.schema-generation.scripts.drop-target", stringWriter);
-        props.put("javax.persistence.schema-generation.scripts.create-target", stringWriter);
+        props.put("jakarta.persistence.schema-generation.scripts.drop-target", stringWriter);
+        props.put("jakarta.persistence.schema-generation.scripts.create-target", stringWriter);
 
         //            HashSet<ValidationMode> validationModes = new HashSet<>();
         //            validationModes.add(ValidationMode.DDL);
@@ -241,8 +241,8 @@ public class SchemaGeneratorJpa {
         //        props.put("hibernate.validator.apply_to_ddl", "true");
 
         /** Activate pachted TypeSaveActivator that respect BeanValidation 2.0 NotEmpty and NotBlank annotations. */
-        props.put("javax.persistence.validation.mode", "NONE");
-        props.put("javax.persistence.validation20.mode", "AUTO");
+        props.put("jakarta.persistence.validation.mode", "NONE");
+        props.put("jakarta.persistence.validation20.mode", "AUTO");
         BeanValidation20IntegratorProvider.addToConfiguration(props);
 
         return props;
@@ -271,12 +271,12 @@ public class SchemaGeneratorJpa {
      * @param properties properties for schema generation; these may also contain provider-specific properties. The
      *        values of these properties override any values that may have been configured elsewhere.
      */
-    private void hiberante51GenerateSchemaWorkarround(final String persistenceUntitName,
-            final Map<String, Object> props) {
-        Check.notNullArgument(persistenceUntitName, "persistenceUntitName");
-        Check.notNullArgument(props, "props");
+    private void hibernate51GenerateSchemaWorkaround(final String persistenceUnitName,
+            final Map<String, Object> properties) {
+        Check.notNullArgument(persistenceUnitName, "persistenceUntitName");
+        Check.notNullArgument(properties, "props");
 
-        EntityManagerFactoryBuilderImpl builder = getEntityManagerFactoryBuilder(persistenceUntitName, props);
+        EntityManagerFactoryBuilderImpl builder = getEntityManagerFactoryBuilder(persistenceUnitName, properties);
 
         builder.build();
         /*

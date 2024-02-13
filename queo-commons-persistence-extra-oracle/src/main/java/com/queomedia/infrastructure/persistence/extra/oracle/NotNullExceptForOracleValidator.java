@@ -1,7 +1,7 @@
 package com.queomedia.infrastructure.persistence.extra.oracle;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * Validator that checks if an field is not null.
@@ -14,7 +14,7 @@ public class NotNullExceptForOracleValidator implements ConstraintValidator<NotN
     /*
      * (non-Javadoc)
      * 
-     * @see javax.validation.ConstraintValidator#initialize(java.lang.annotation.Annotation)
+     * @see jakarta.validation.ConstraintValidator#initialize(java.lang.annotation.Annotation)
      */
     @Override
     public void initialize(final NotNullExceptForOracle constraintAnnotation) {

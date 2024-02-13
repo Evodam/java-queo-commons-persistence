@@ -39,25 +39,6 @@ public interface GenericEntityDao<T> {
     List<T> findAll(Sort sort);
 
     /**
-     * Find by example.
-     * 
-     * @param exampleInstance the example instance
-     * 
-     * @return all entities that match the example
-     */
-    List<T> findByExample(T exampleInstance);
-
-    /**
-     * Find by example.
-     * 
-     * @param exampleInstance the example instance
-     * @param excludeProperty the exclude property
-     * 
-     * @return all entities that match the example
-     */
-    List<T> findByExample(final T exampleInstance, final String[] excludeProperty);
-
-    /**
      * Make entity persistent.
      * 
      * @param entity the entity
@@ -98,13 +79,13 @@ public interface GenericEntityDao<T> {
      * Must be called at the end of a unit of work, before committing the transaction and closing the
      * session (depending on 
      * <a href="https://docs.jboss.org/hibernate/orm/4.2/javadocs/org/hibernate/FlushMode.html">flush-mode</a>,
-     * {@link javax.transaction.Transaction#commit()} calls this method).
+     * {@link jakarta.transaction.Transaction#commit()} calls this method).
      * <p>
      * <i>Flushing</i> is the process of synchronizing the underlying persistent
      * store with persistable state held in memory.
      * </p>
      *
-     * @throws javax.persistence.PersistenceException Indicates problems flushing the session or
+     * @throws jakarta.persistence.PersistenceException Indicates problems flushing the session or
      * talking to the database.
      */
     void flushSession();

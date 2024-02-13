@@ -33,8 +33,9 @@ import org.hibernate.usertype.UserType;
 public class NotNullString implements UserType {
 
     @Override
-    public int[] sqlTypes() {
-        return new int[] { Types.VARCHAR };
+    public int getSqlType() {
+
+        return Types.VARCHAR;
     }
 
     @SuppressWarnings("rawtypes")
@@ -58,21 +59,22 @@ public class NotNullString implements UserType {
     public int hashCode(final Object x) throws HibernateException {
         return x.hashCode();
     }
-    
+
     @Override
-    public Object nullSafeGet(final ResultSet rs, final String[] names, final SharedSessionContractImplementor session,
-            final Object owner) throws HibernateException, SQLException {
-        if (rs.getString(names[0]) != null) {
-            return rs.getString(names[0]);
+    public Object nullSafeGet(final ResultSet rs, final int position, final SharedSessionContractImplementor session,
+            final Object owner)
+            throws SQLException {
+        if (rs.getString(position) != null) {
+            return rs.getString(position);
         } else {
             return "";
         }
-
     }
 
     @Override
     public void nullSafeSet(final PreparedStatement st, final Object value, final int index,
-            final SharedSessionContractImplementor session) throws HibernateException, SQLException {
+            final SharedSessionContractImplementor session)
+            throws HibernateException, SQLException {
         st.setString(index, (String) value);
 
     }

@@ -1,6 +1,6 @@
 package com.queomedia.persistence.extra.springdatajpa.scenario;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 import com.queomedia.persistence.BusinessEntity;
 import com.queomedia.persistence.BusinessId;

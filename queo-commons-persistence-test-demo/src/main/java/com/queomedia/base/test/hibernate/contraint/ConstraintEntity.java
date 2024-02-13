@@ -1,7 +1,7 @@
 package com.queomedia.base.test.hibernate.contraint;
 
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotNull;
 
 import com.queomedia.base.test.hibernate.manytoonelazy.ComponentEntity;
 import com.queomedia.persistence.BusinessEntity;
@@ -24,7 +24,7 @@ public class ConstraintEntity extends BusinessEntity<ComponentEntity> {
     @org.hibernate.validator.constraints.NotEmpty
     private String notEmptyString_hibernateValidator;
 
-    @javax.validation.constraints.NotEmpty
+    @jakarta.validation.constraints.NotEmpty
     private String notEmptyString_javaxValidation;
 
     /**

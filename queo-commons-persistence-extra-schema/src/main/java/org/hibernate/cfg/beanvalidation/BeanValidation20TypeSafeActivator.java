@@ -11,16 +11,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.validation.metadata.BeanDescriptor;
-import javax.validation.metadata.ConstraintDescriptor;
-import javax.validation.metadata.PropertyDescriptor;
+import jakarta.validation.Validation;
+import jakarta.validation.ValidatorFactory;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.metadata.BeanDescriptor;
+import jakarta.validation.metadata.ConstraintDescriptor;
+import jakarta.validation.metadata.PropertyDescriptor;
 
 import org.hibernate.AssertionFailure;
 import org.hibernate.MappingException;
@@ -91,9 +91,9 @@ public class BeanValidation20TypeSafeActivator {
      * {@link NotNull} annotation.
      * 
      * For example:
-     * {@link javax.validation.constraints.NotEmpty} has no {@link NotNull} annotation.
+     * {@link jakarta.validation.constraints.NotEmpty} has no {@link NotNull} annotation.
      * In contrast {@link org.hibernate.validator.constraints.NotEmpty} is a composite constraint of 
-     * {@link NotNull} and {@link javax.validation.constraints.Size}
+     * {@link NotNull} and {@link jakarta.validation.constraints.Size}
      * </p>
      * 
      * <p>
@@ -105,25 +105,25 @@ public class BeanValidation20TypeSafeActivator {
      * According to the specification: http://beanvalidation.org/2.0/spec/#builtinconstraints-notempty this are:
      * <ul>
      *  <li>{@link NotNull}</li>
-     *  <li>{@link javax.validation.constraints.NotEmpty}</li>
-     *  <li>{@link javax.validation.constraints.NotBlank}</li>
+     *  <li>{@link jakarta.validation.constraints.NotEmpty}</li>
+     *  <li>{@link jakarta.validation.constraints.NotBlank}</li>
      * </ul>
      * 
-     * <i>({@link javax.validation.constraints.Email} has no specified null behavior in the specification, but it is likely that it
+     * <i>({@link jakarta.validation.constraints.Email} has no specified null behavior in the specification, but it is likely that it
      * is intended to accept null. And this is the way how it is implemented by Hibernate-Validation 6.0)</i>
      * 
      * This constant use class names instead of class objects in order to avoid problems when bean validations 2.0 is not
      * in the class path.
      */
     private static final List<String> NOT_NULL_CONSTRAINT_ANNOTATIONS = Arrays.asList(
-            "javax.validation.constraints.NotNull",
-            "javax.validation.constraints.NotEmpty",
-            "javax.validation.constraints.NotBlank");
+            "jakarta.validation.constraints.NotNull",
+            "jakarta.validation.constraints.NotEmpty",
+            "jakarta.validation.constraints.NotBlank");
 
     private static final CoreMessageLogger LOG = Logger.getMessageLogger(CoreMessageLogger.class,
             BeanValidation20TypeSafeActivator.class.getName());
 
-    private static final String FACTORY_PROPERTY = "javax.persistence.validation.factory";
+    private static final String FACTORY_PROPERTY = "jakarta.persistence.validation.factory";
 
     /**
      * Used to validate a supplied ValidatorFactory instance as being castable to ValidatorFactory.
@@ -488,6 +488,7 @@ public class BeanValidation20TypeSafeActivator {
         try {
             return Validation.buildDefaultValidatorFactory();
         } catch (Exception e) {
+            LOG.warn("Unable to build the default ValidatorFactory", e);
             throw new IntegrationException("Unable to build the default ValidatorFactory", e);
         }
     }

@@ -1,6 +1,6 @@
 package com.queomedia.base.test.hibernate.manytoonelazy;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 import com.queomedia.persistence.BusinessEntity;
 import com.queomedia.persistence.BusinessId;

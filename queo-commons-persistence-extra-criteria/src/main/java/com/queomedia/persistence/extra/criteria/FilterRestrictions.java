@@ -6,12 +6,15 @@ package com.queomedia.persistence.extra.criteria;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 
 import com.queomedia.commons.checks.Check;
 import com.queomedia.commons.exceptions.NotImplementedCaseExecption;
+
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 /**
  * The Class FilterRestrictions.
@@ -30,11 +33,11 @@ public final class FilterRestrictions {
      * @param crit the crit
      * @param nullAllowed the null allowed criterion
      */
-    public static void addNullAllowed(final Criteria crit, final Criterion nullAllowed) {
+    public static void addNullAllowed(final CriteriaQuery<?> crit, final Predicate nullAllowed) {
         Check.notNullArgument(crit, "crit");
 
         if (nullAllowed != null) {
-            crit.add(nullAllowed);
+            crit.where(nullAllowed);
         }
     }
 
@@ -46,7 +49,9 @@ public final class FilterRestrictions {
      * 
      * @return the criterion
      */
-    public static Criterion yesNo(final String propertyName, final YesNoDontCare restriction) {
+    public static Predicate yesNo(final String propertyName, final YesNoDontCare restriction,
+            final CriteriaBuilder criteriaBuilder,
+            final Root<?> root) {
         Check.notNullArgument(propertyName, "propertyName");
         Check.notNullArgument(restriction, "restriction");
 
@@ -54,9 +59,9 @@ public final class FilterRestrictions {
         case DONT_CARE:
             return null;
         case YES:
-            return Restrictions.eq(propertyName, true);
+            return criteriaBuilder.equal(root, true);
         case NO:
-            return Restrictions.eq(propertyName, false);
+            return criteriaBuilder.equal(root, false);
 
         default:
             throw new NotImplementedCaseExecption("The case " + restriction + " is not implemented.");
@@ -69,10 +74,13 @@ public final class FilterRestrictions {
      * @param <T> the generic type
      * @param propertyName the property name
      * @param restrictions the restrictions
+     * @param criteriaBuilder the criteria builder
+     * @param root the root
      * @return the criterion
-     */    
-    protected static <T extends Enum<?>> Criterion enumFilter(final String propertyName,
-            final EnumFilter<T> restrictions) {
+     */
+    protected static <T extends Enum<?>> Predicate enumFilter(final String propertyName,
+            final EnumFilter<T> restrictions, final CriteriaBuilder criteriaBuilder,
+            final Root<?> root) {
         Check.notNullArgument(propertyName, "propertyName");
         Check.notNullArgument(restrictions, "restrictions");
 
@@ -100,31 +108,37 @@ public final class FilterRestrictions {
         }
 
         if ((yesList.size() > 0) && (noList.size() == 0)) {
-            return Restrictions.in(propertyName, yesList.toArray());
+            return criteriaBuilder.in(root.get(propertyName)).value(yesList);
         }
         if ((yesList.size() == 0) && (noList.size() > 0)) {
-            return Restrictions.not(Restrictions.in(propertyName, noList.toArray()));
+            return criteriaBuilder.not(criteriaBuilder.in(root.get(propertyName)).value(yesList));
         }
         if ((yesList.size() > 0) && (noList.size() > 0)) {
-            return Restrictions.and(Restrictions.in(propertyName, yesList.toArray()), Restrictions.not(Restrictions
-                    .in(propertyName, noList.toArray())));
+            return criteriaBuilder.and(criteriaBuilder.in(root.get(propertyName)).value(yesList),
+                    criteriaBuilder.not(criteriaBuilder
+                            .in(root.get(propertyName)).value(noList)));
         }
         return null;
     }
 
     /**
      * Adds the yes no.
-     * 
+     *
      * @param crit the crit
      * @param propertyName the property name
      * @param restriction the restriction
+     * @param criteriaBuilder the criteria builder
+     * @param root the root
      */
-    public static void addYesNo(final Criteria crit, final String propertyName, final YesNoDontCare restriction) {
+    public static void addYesNo(final CriteriaQuery<?> crit, final String propertyName, final YesNoDontCare restriction,
+            final CriteriaBuilder criteriaBuilder,
+            final Root<?> root) {
         Check.notNullArgument(crit, "crit");
         Check.notNullArgument(propertyName, "propertyName");
         Check.notNullArgument(restriction, "restriction");
 
-        FilterRestrictions.addNullAllowed(crit, FilterRestrictions.yesNo(propertyName, restriction));
+        FilterRestrictions.addNullAllowed(crit,
+                FilterRestrictions.yesNo(propertyName, restriction, criteriaBuilder, root));
     }
 
     /**
@@ -134,22 +148,26 @@ public final class FilterRestrictions {
      * @param crit the crit
      * @param propertyName the property name
      * @param restrictions the restrictions
+     * @param criteriaBuilder the criteria builder
+     * @param root the root
      */
-    public static <T extends Enum<?>> void addEnumFilter(final Criteria crit, final String propertyName,
-            final EnumFilter<T> restrictions) {
+    public static <T extends Enum<?>> void addEnumFilter(final CriteriaQuery<?> crit, final String propertyName,
+            final EnumFilter<T> restrictions, final CriteriaBuilder criteriaBuilder,
+            final Root<?> root) {
         Check.notNullArgument(crit, "crit");
         Check.notNullArgument(propertyName, "propertyName");
         Check.notNullArgument(restrictions, "restrictions");
 
-        FilterRestrictions.addNullAllowed(crit, FilterRestrictions.enumFilter(propertyName, restrictions));
+        FilterRestrictions.addNullAllowed(crit,
+                FilterRestrictions.enumFilter(propertyName, restrictions, criteriaBuilder, root));
     }
-    
+
     /**
      * Apply the limit to the critiera query.
      * @param crit the criteria query
      * @param limit the limit
      */
-    public static void setLimit(final Criteria crit, final Limit limit) {
+    public static void setLimit(final Query<?> crit, final Limit limit) {
         Check.notNullArgument(crit, "crit");
         Check.notNullArgument(limit, "limit");
 

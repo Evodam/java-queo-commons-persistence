@@ -2,12 +2,14 @@ package com.queomedia.persistence.extra.fake;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.query.FluentQuery;
 
 import com.queomedia.commons.exceptions.NotImplementedException;
 import com.queomedia.persistence.BusinessEntity;
@@ -52,6 +54,16 @@ public class AbstractGenericSpecificationExecutorDaoFake<T extends BusinessEntit
 
     @Override
     public boolean exists(Specification<T> spec) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public long delete(final Specification<T> spec) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public <S extends T, R> R findBy(final Specification<T> spec, final Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         throw new NotImplementedException();
     }
 

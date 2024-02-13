@@ -1,5 +1,7 @@
 package com.queomedia.infrastructure.persistence.extra.oracle;
 
+import java.sql.Types;
+
 import org.hibernate.dialect.Oracle10gDialect;
 
 /**
@@ -14,12 +16,14 @@ import org.hibernate.dialect.Oracle10gDialect;
  */
 public class Oracle10gDialectDoubleNumber extends Oracle10gDialect {
 
-    /**
-     * Instantiates a new oracle10g dialect double number dialect.
-     */
-    public Oracle10gDialectDoubleNumber() {
-        this.registerColumnType(java.sql.Types.DOUBLE, "number(16,6)");
+    @Override
+    protected String columnType(final int sqlTypeCode) {
+
+        if (sqlTypeCode == Types.DOUBLE) {
+            return "number(16,6)";
+        } else {
+            return super.columnType(sqlTypeCode);
+        }
     }
 
-    
 }

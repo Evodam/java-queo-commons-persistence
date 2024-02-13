@@ -5,23 +5,21 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.LockModeType;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
-import org.hibernate.Criteria;
-import org.hibernate.LockMode;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Example;
-import org.hibernate.criterion.Projections;
-import org.hibernate.jpa.HibernateEntityManager;
+import org.hibernate.query.Query;
+import org.hibernate.query.criteria.HibernateCriteriaBuilder;
+import org.hibernate.query.criteria.JpaCriteriaQuery;
 import org.hibernate.transform.ResultTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 
@@ -46,14 +44,14 @@ public class GenericHibernateDaoImpl<T> implements GenericEntityDao<T> {
 
     /** The entity manage injects by the container. */
     @PersistenceContext
-    private HibernateEntityManager entityManager;
+    private Session entityManager;
 
     /**
      * Gets the entity manager.
      *
      * @return the entity manager
      */
-    protected HibernateEntityManager getEntityManager() {
+    protected Session getEntityManager() {
         return entityManager;
     }
 
@@ -99,29 +97,31 @@ public class GenericHibernateDaoImpl<T> implements GenericEntityDao<T> {
         return this.entityManager.createQuery(selectAllQuery).getResultList();
     }
 
-    /*
-     * @see com.queomedia.fff.db.GenericDAO#findByExample(java.lang.Object, java.langString[])
-     */
-    @SuppressWarnings("unchecked")
-    public List<T> findByExample(final T exampleInstance, final String[] excludeProperty) {
-        Check.notNullArgument(exampleInstance, "exampleInstance");
-        Example example = Example.create(exampleInstance);
-        for (String exclude : excludeProperty) {
-            example.excludeProperty(exclude);
-        }
-
-        Criteria criteria = getCriteriaAPI();
-        criteria.add(example);
-        return criteria.list();
-    }
+//    /*
+//     * @see com.queomedia.fff.db.GenericDAO#findByExample(java.lang.Object, java.langString[])
+//     */
+//    @SuppressWarnings("unchecked")
+//    public List<T> findByExample(final T exampleInstance, final String[] excludeProperty) {
+//        Check.notNullArgument(exampleInstance, "exampleInstance");
+//
+//        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll().withIgnorePaths(excludeProperty);
+//        Example example = Example.of(exampleInstance, exampleMatcher);
+//
+//        CriteriaQuery<T> criteria = getCriteriaAPI();
+//
+//
+////        criteria.
+////                .add(example);
+//        return criteria.fetch(example);
+//    }
 
     /*
      * @see com.queomedia.fff.db.GenericDAO#findByExample(java.lang.Object)
      */
-    @Override
-    public List<T> findByExample(final T exampleInstance) {
-        return this.findByExample(exampleInstance, new String[0]);
-    }
+//    @Override
+//    public List<T> findByExample(final T exampleInstance) {
+//        return this.findByExample(exampleInstance, new String[0]);
+//    }
     
     
     /**
@@ -157,7 +157,7 @@ public class GenericHibernateDaoImpl<T> implements GenericEntityDao<T> {
             GenericHibernateDaoImpl.LOGGER
                     .debug("makePersistent(T) - entity=" + entity + ", T=" + this.persistentClass.getSimpleName()); //$NON-NLS-1$
         }
-        entityManager.getSession().saveOrUpdate(entity);
+        entityManager.saveOrUpdate(entity);
         return entity;
     }
 
@@ -172,17 +172,17 @@ public class GenericHibernateDaoImpl<T> implements GenericEntityDao<T> {
         }
 
         for (T entity : entities) {
-            entityManager.getSession().saveOrUpdate(entity);
+            entityManager.saveOrUpdate(entity);
         }
     }
 
     public void makeTransient(final T entity) {
-        entityManager.getSession().delete(entity);
+        entityManager.delete(entity);
     }
 
     public void makeTransient(final Collection<? extends T> entities) {
         for (T entity : entities) {
-            entityManager.getSession().delete(entity);
+            entityManager.delete(entity);
         }
     }
 
@@ -212,27 +212,28 @@ public class GenericHibernateDaoImpl<T> implements GenericEntityDao<T> {
     }
 
     @Deprecated
-    protected Criteria getCriteriaAPI() {
-        return entityManager.getSession().createCriteria(this.persistentClass);
+    protected CriteriaQuery<T> getCriteriaAPI() {
+        HibernateCriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        return criteriaBuilder.createQuery(this.persistentClass);
     }
 
-    /**
-     * Create and execute a criteria api call for the defined criterons on the specified class.
-     * 
-     * @param criterion the criterions
-     * 
-     * @return the list of matching entities
-     */
-    @Deprecated
-    protected List<T> findByCriteria(final Criterion... criterion) {
-        Criteria crit = getCriteriaAPI();
-        for (Criterion c : criterion) {
-            crit.add(c);
-        }
-        @SuppressWarnings("unchecked")
-        List<T> result = (List<T>) crit.list(); 
-        return result;
-    }
+//    /**
+//     * Create and execute a criteria api call for the defined criterons on the specified class.
+//     *
+//     * @param criterion the criterions
+//     *
+//     * @return the list of matching entities
+//     */
+//    @Deprecated
+//    protected List<T> findByCriteria(final Criterion... criterion) {
+//        JpaCriteriaQuery<T> crit = getCriteriaAPI();
+//        for (Criterion c : criterion) {
+//            crit.add(c);
+//        }
+//        @SuppressWarnings("unchecked")
+//        List<T> result = (List<T>) crit.list();
+//        return result;
+//    }
 
     /**
      * Find objects with a HQL statement.
@@ -265,7 +266,7 @@ public class GenericHibernateDaoImpl<T> implements GenericEntityDao<T> {
 
     @Override
     public void emptySession() {
-        Session session = entityManager.getSession();
+        Session session = entityManager;
         session.flush();
         session.clear();
     }
@@ -326,7 +327,7 @@ public class GenericHibernateDaoImpl<T> implements GenericEntityDao<T> {
         return entityManager.merge(entity);
     }
 
-    public javax.persistence.Query createHQLQuery(String query) {
+    public jakarta.persistence.Query createHQLQuery(String query) {
         return entityManager.createQuery(query);
     }
 }

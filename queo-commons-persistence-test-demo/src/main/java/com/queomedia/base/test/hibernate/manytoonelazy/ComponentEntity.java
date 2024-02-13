@@ -1,8 +1,8 @@
 package com.queomedia.base.test.hibernate.manytoonelazy;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 
 import com.queomedia.persistence.BusinessEntity;
 import com.queomedia.persistence.BusinessId;

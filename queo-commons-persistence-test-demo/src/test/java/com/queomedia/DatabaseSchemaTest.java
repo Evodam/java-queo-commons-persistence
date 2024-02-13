@@ -32,6 +32,13 @@ public class DatabaseSchemaTest {
         List<String> originalLines = FileUtils.readLines(orignalFile);
         List<String> currentScriptLines = Arrays.asList(currentScript.split("\\r?\\n"));
 
+        System.out.println("###");
+        for (String currentScriptLine : currentScriptLines) {
+            System.out.println(currentScriptLine);
+        }
+
+        System.out.println("###");
+
         AssertUtil.containsExact(originalLines, currentScriptLines);
     }
 
@@ -88,7 +95,7 @@ public class DatabaseSchemaTest {
     }
 
     /**
-     * A property of type String with javax.validation.constraints.NotEmpty
+     * A property of type String with jakarta.validation.constraints.NotEmpty
      * annotation must lead to an not null constraint in the database.
      * 
      * @throws Exception no exception expected
